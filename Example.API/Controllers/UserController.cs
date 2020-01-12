@@ -4,59 +4,78 @@
 
 namespace Example.API.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using AutoMapper;
     using Example.API.Controllers.ViewModels;
+    using Example.API.Domain.Model;
+    using Example.API.Domain.Repositories;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult Get()
+        private readonly IUserRepository userRepository;
+
+        private readonly IMapper mapper;
+
+        public UserController(IUserRepository userRepository, IMapper mapper)
         {
-            return this.Ok(new UserResponse[]
-            {
-                new UserResponse
-                {
-                    Id = 1,
-                    Name = "Name1",
-                    Birthdate = "2019-01-01",
-                },
-                new UserResponse
-                {
-                    Id = 1,
-                    Name = "Name2",
-                    Birthdate = "2019-01-01",
-                },
-            });
+            this.userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            IEnumerable<User> users = await this.userRepository.GetAll();
+
+            IEnumerable<UserResponse> response = this.mapper.Map<IEnumerable<UserResponse>>(users);
+
+            return this.Ok(response);
         }
 
         [HttpGet("{id}", Name = "Get")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return this.Ok(new UserResponse
-            {
-                Id = id,
-                Name = "Name",
-                Birthdate = "2019-01-01",
-            });
+            User user = await this.userRepository.GetById(id);
+
+            var response = this.mapper.Map<UserResponse>(user);
+
+            return this.Ok(response);
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] UserRequest user)
+        public async Task<IActionResult> Post([FromBody] UserRequest userRequest)
         {
-            return this.NoContent();
+            var userInfo = this.mapper.Map<UserInfo>(userRequest);
+
+            User user = await this.userRepository.Create(userInfo);
+
+            var response = this.mapper.Map<UserResponse>(user);
+
+            return this.Ok(response);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] UserRequest user)
+        public async Task<IActionResult> Put(int id, [FromBody] UserRequest userRequest)
         {
+            var user = this.mapper.Map<User>(userRequest);
+            user.Id = id;
+
+            await this.userRepository.Update(user);
+
             return this.NoContent();
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            await this.userRepository.DeleteById(id);
+
             return this.NoContent();
         }
     }
