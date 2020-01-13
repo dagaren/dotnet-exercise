@@ -3,12 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.API", "Example.API.csproj", "{D1D297AF-F56C-4B37-BC68-4C9077F84CA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.API", "Example.API.csproj", "{D1D297AF-F56C-4B37-BC68-4C9077F84CA0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{699E4E74-4E62-421E-810B-F47F798AF242}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D1EC2657-2E94-43E8-8EA8-F3C066994E0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.API.Tests", "..\Example.API.Tests\Example.API.Tests.csproj", "{CA6F5969-2514-462C-8122-3210628499B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,9 +24,16 @@ Global
 		{D1D297AF-F56C-4B37-BC68-4C9077F84CA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1D297AF-F56C-4B37-BC68-4C9077F84CA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1D297AF-F56C-4B37-BC68-4C9077F84CA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA6F5969-2514-462C-8122-3210628499B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA6F5969-2514-462C-8122-3210628499B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA6F5969-2514-462C-8122-3210628499B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA6F5969-2514-462C-8122-3210628499B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CA6F5969-2514-462C-8122-3210628499B8} = {D1EC2657-2E94-43E8-8EA8-F3C066994E0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AEAD2DCC-5699-4E98-BB8F-824D7879EB8D}
