@@ -96,11 +96,11 @@ namespace Example.API.DataAccess
             await this.SafeExecution(
                async () =>
                {
-                   user = await this.dbContext.Users.SingleOrDefaultAsync(x => x.Id == id) ?? throw new EntityNotFoundException<int>(id);
+                   user = await this.dbContext.Users.SingleOrDefaultAsync(x => x.Id == id);
                },
                "Error retrieving user");
 
-            return user;
+            return user ?? throw new EntityNotFoundException();
         }
 
         private async Task SafeExecution(Func<Task> action, string errorMessage)
