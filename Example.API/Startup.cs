@@ -7,6 +7,7 @@ namespace Example.API
     using AutoMapper;
     using Example.API.DataAccess;
     using Example.API.Domain.Repositories;
+    using FluentValidation.AspNetCore;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -25,7 +26,8 @@ namespace Example.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
 
             services.AddAutoMapper(typeof(Startup));
             services.AddSingleton<IUserRepository, MockUserRepository>();
