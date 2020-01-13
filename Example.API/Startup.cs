@@ -10,6 +10,7 @@ namespace Example.API
     using FluentValidation.AspNetCore;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
@@ -30,7 +31,8 @@ namespace Example.API
                     .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
 
             services.AddAutoMapper(typeof(Startup));
-            services.AddSingleton<IUserRepository, MockUserRepository>();
+            services.AddScoped<IUserRepository, DbContextRespository>()
+                    .AddDbContext<UserDbContext>(options => options.UseInMemoryDatabase("InMemoryDb"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
