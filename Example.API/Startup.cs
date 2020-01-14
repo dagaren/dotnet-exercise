@@ -10,10 +10,13 @@ namespace Example.API
     using Example.API.Filters;
     using FluentValidation.AspNetCore;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Diagnostics.HealthChecks;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Diagnostics.HealthChecks;
     using Microsoft.Extensions.Hosting;
 
     public class Startup
@@ -37,7 +40,8 @@ namespace Example.API
 
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IUserRepository, DbContextRespository>()
-                    .AddDbContext<UserDbContext>(options => options.UseInMemoryDatabase("InMemoryDb"));
+                    .AddDbContext<UserDbContext>(options => options.UseInMemoryDatabase("InMemoryDb"))
+                    .AddHealthChecks();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +61,20 @@ namespace Example.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                endpoints.MapHealthChecks(
+                    "/health",
+                    new HealthCheckOptions()
+                    {
+                        AllowCachingResponses = false,
+                        ResultStatusCodes =
+                        {
+                            [HealthStatus.Healthy] = StatusCodes.Status200OK,
+                            [HealthStatus.Degraded] = StatusCodes.Status200OK,
+                            [HealthStatus.Unhealthy] = StatusCodes.Status500InternalServerError,
+                        },
+                        Predicate = (check) => check.Tags.Contains("health"),
+                    });
             });
         }
     }
