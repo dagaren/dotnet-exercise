@@ -29,7 +29,7 @@ namespace Example.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
             IEnumerable<User> users = await this.userRepository.GetAll();
 
@@ -38,7 +38,7 @@ namespace Example.API.Controllers
             return this.Ok(response);
         }
 
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
             User user = await this.userRepository.GetById(id);
